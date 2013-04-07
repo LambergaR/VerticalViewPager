@@ -1,4 +1,4 @@
 VerticalViewPager
 =================
 
-Vertical implementation of Android HorizontalViewPager
+Vertical implementation of Android ViewPager
