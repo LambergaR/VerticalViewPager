@@ -1737,8 +1737,8 @@ public class VerticalViewPager extends ViewGroup {
         }
     }
 
-    private boolean isGutterDrag(float x, float dx) {
-        return (x < mGutterSize && dx > 0) || (x > getWidth() - mGutterSize && dx < 0);
+    private boolean isGutterDrag(float y, float dy) {
+        return (y < mGutterSize && dy > 0) || (y > getHeight() - mGutterSize && dy < 0);
     }
 
     private void enableLayers(boolean enable) {
@@ -2398,10 +2398,10 @@ public class VerticalViewPager extends ViewGroup {
      * @param v View to test for horizontal scrollability
      * @param checkV Whether the view v passed should itself be checked for scrollability (true),
      *               or just its children (false).
-     * @param dx Delta scrolled in pixels
+     * @param dy Delta scrolled in pixels
      * @param x X coordinate of the active touch point
      * @param y Y coordinate of the active touch point
-     * @return true if child views of v can be scrolled by delta of dx.
+     * @return true if child views of v can be scrolled by delta of dy.
      */
     protected boolean canScroll(View v, boolean checkV, int dy, int x, int y) {
         if (v instanceof ViewGroup) {
@@ -2423,7 +2423,7 @@ public class VerticalViewPager extends ViewGroup {
             }
         }
 
-        return checkV && ViewCompat.canScrollHorizontally(v, -dy);
+        return checkV && ViewCompat.canScrollVertically(v, -dy);
     }
 
     @Override
