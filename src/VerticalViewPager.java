@@ -1737,8 +1737,8 @@ public class VerticalViewPager extends ViewGroup {
         }
     }
 
-    private boolean isGutterDrag(float x, float dx) {
-        return (x < mGutterSize && dx > 0) || (x > getWidth() - mGutterSize && dx < 0);
+    private boolean isGutterDrag(float y, float dy) {
+        return (y < mGutterSize && dy > 0) || (y > getHeight() - mGutterSize && dy < 0);
     }
 
     private void enableLayers(boolean enable) {
@@ -2398,10 +2398,10 @@ public class VerticalViewPager extends ViewGroup {
      * @param v View to test for horizontal scrollability
      * @param checkV Whether the view v passed should itself be checked for scrollability (true),
      *               or just its children (false).
-     * @param dx Delta scrolled in pixels
+     * @param dy Delta scrolled in pixels
      * @param x X coordinate of the active touch point
      * @param y Y coordinate of the active touch point
-     * @return true if child views of v can be scrolled by delta of dx.
+     * @return true if child views of v can be scrolled by delta of dy.
      */
     protected boolean canScroll(View v, boolean checkV, int dy, int x, int y) {
         if (v instanceof ViewGroup) {
@@ -2416,14 +2416,19 @@ public class VerticalViewPager extends ViewGroup {
                 final View child = group.getChildAt(i);
                 if (x + scrollX >= child.getLeft() && x + scrollX < child.getRight() &&
                         y + scrollY >= child.getTop() && y + scrollY < child.getBottom() &&
-                		canScroll(child, true, dy, x + scrollX - child.getLeft(),
+                        canScroll(child, true, dy, x + scrollX - child.getLeft(),
                                 y + scrollY - child.getTop())) {
                     return true;
                 }
             }
         }
 
-        return checkV && ViewCompat.canScrollHorizontally(v, -dy);
+        // to vertical scroll inner WebViews for Froyo+
+        if (v instanceof ExtendedWebView) {
+            return ((ExtendedWebView) v).canScrollVertical(-dy);
+        } else {
+            return checkV && ViewCompat.canScrollVertically(v, -dy);
+        }
     }
 
     @Override
