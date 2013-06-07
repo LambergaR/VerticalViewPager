@@ -2416,14 +2416,19 @@ public class VerticalViewPager extends ViewGroup {
                 final View child = group.getChildAt(i);
                 if (x + scrollX >= child.getLeft() && x + scrollX < child.getRight() &&
                         y + scrollY >= child.getTop() && y + scrollY < child.getBottom() &&
-                		canScroll(child, true, dy, x + scrollX - child.getLeft(),
+                        canScroll(child, true, dy, x + scrollX - child.getLeft(),
                                 y + scrollY - child.getTop())) {
                     return true;
                 }
             }
         }
 
-        return checkV && ViewCompat.canScrollVertically(v, -dy);
+        // to vertical scroll inner WebViews for Froyo+
+        if (v instanceof ExtendedWebView) {
+            return ((ExtendedWebView) v).canScrollVertical(-dy);
+        } else {
+            return checkV && ViewCompat.canScrollVertically(v, -dy);
+        }
     }
 
     @Override
